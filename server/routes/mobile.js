@@ -26,6 +26,27 @@ app.post('/upload',upload.single('mobileimage'),(req,res,next)=>{
             mobileprice
         }= req.body;
         const filename=req.file.filename;
+        if(!mobilename)
+        {
+            return res.send({
+                success:false,
+                message:'Mobile Name cannot be empty.'
+        });
+        }
+        if(!mobilespecs)
+        {
+            return res.send({
+                success:false,
+                message:'Some specs are required.'
+        });
+        }
+        if(!mobileprice)
+        {
+            return res.send({
+                success:false,
+                message:'Please specify the mobile price.'
+        });
+        }
         mobile.find({mobilename:mobilename},(err,data)=>{
                 if(err)
                 {
@@ -125,6 +146,15 @@ app.post('/addtocart',(req,res,next)=>{
                         message:'Mobile phone added to cart'
                     });
                 });
+                mobile.findOneAndUpdate({mobilename:mobilename},{$set:{ispresent:true}},null,(err,docs)=>{
+                    if(err)
+                    {
+                        return res.send({
+                            success:false,
+                            message:'Error:server error'
+                    });
+                }
+                });
         }
         else
         {
@@ -162,6 +192,15 @@ app.get('/cart/delete',(req,res,next)=>{
                 message:'Error:server error'
             });
         }
+        mobile.findOneAndUpdate({mobilename:mobilename},{$set:{ispresent:false}},null,(err,docs)=>{
+            if(err)
+            {
+                return res.send({
+                    success:false,
+                    message:'Error:server error'
+            });
+        }
+        });
         return res.send({
             success:true,
             message:'deleted'
@@ -182,6 +221,7 @@ app.get('/cart/add',(req,res,next)=>{
                 message:'Error:server error'
             });
         }
+       
         return res.send({
             success:true,
             message:'deleted'

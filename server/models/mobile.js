@@ -17,6 +17,10 @@ const mobileschema = new mongoose.Schema({
     mobileimage:{
         type:String,
         default:''
+    },
+    ispresent:{
+        type:Boolean,
+        default:false
     }
 });
 

@@ -44,6 +44,13 @@ var app=express();
           message:'Error:password cannot be blank.'
       });
     }
+    if(password.length<8)
+    {
+      return res.send({
+        success:false,
+        message:'Error:password too short.'
+    });
+    }
 
     user.find({email:email},(err,previoususer)=>{
         if(err)
