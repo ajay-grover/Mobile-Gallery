@@ -114,10 +114,11 @@ app.post('/addtocart',(req,res,next)=>{
         mobilespecs,
         mobileprice,
         mobileimage,
-        quantity
+        quantity,
+        email
     }=req.body;
 
-    cart.findOneAndUpdate({mobilename:mobilename},{$set:{quantity:quantity+1}},null,(err,docs)=>{
+    cart.findOne({mobilename:mobilename,email:email},(err,docs)=>{
         if(err)
         {
             return res.send({
@@ -133,6 +134,7 @@ app.post('/addtocart',(req,res,next)=>{
             newcart.mobileprice=mobileprice;
             newcart.mobileimage=mobileimage;
             newcart.quantity=quantity;
+            newcart.email=email;
                 newcart.save((err,docs)=>{
                     if(err)
                     {
@@ -168,7 +170,10 @@ app.post('/addtocart',(req,res,next)=>{
 });
 
 app.get('/getcart',(req,res,next)=>{
-        cart.find({},(err,docs)=>{
+    const{
+        email
+    }=req.query;
+        cart.find({email:email},(err,docs)=>{
             if(err)
             {
                 return res.send({
@@ -182,9 +187,10 @@ app.get('/getcart',(req,res,next)=>{
 
 app.get('/cart/delete',(req,res,next)=>{
     const{
-        mobilename
+        mobilename,
+        email
     }=req.query;
-    cart.deleteOne({mobilename:mobilename},(err,docs)=>{
+    cart.deleteOne({mobilename:mobilename,email:email},(err,docs)=>{
         if(err)
         {
             return res.send({
@@ -211,9 +217,10 @@ app.get('/cart/delete',(req,res,next)=>{
 app.get('/cart/add',(req,res,next)=>{
     const{
         mobilename,
-        quantity
+        quantity,
+        email
     }=req.query;
-    cart.findOneAndUpdate({mobilename:mobilename},{$set:{quantity:parseInt(quantity,10)+1}},null,(err,docs)=>{
+    cart.findOneAndUpdate({mobilename:mobilename,email:email},{$set:{quantity:parseInt(quantity,10)+1}},null,(err,docs)=>{
         if(err)
         {
             return res.send({
@@ -232,11 +239,12 @@ app.get('/cart/add',(req,res,next)=>{
 app.get('/cart/sub',(req,res,next)=>{
     const{
         mobilename,
-        quantity
+        quantity,
+        email
     }=req.query;
     if(quantity>1)
     {
-        cart.findOneAndUpdate({mobilename:mobilename},{$set:{quantity:parseInt(quantity,10)-1}},null,(err,docs)=>{
+        cart.findOneAndUpdate({mobilename:mobilename,email:email},{$set:{quantity:parseInt(quantity,10)-1}},null,(err,docs)=>{
             if(err)
             {
                 return res.send({

@@ -20,6 +20,10 @@ const cartschema = new mongoose.Schema({
     quantity:{
         type:Number,
         default:1
+    },
+    email:{
+        type:String,
+        default:''
     }
 });
 

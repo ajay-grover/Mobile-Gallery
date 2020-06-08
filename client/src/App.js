@@ -10,12 +10,13 @@ import {Navbar,
 
 import{
     getfromstorage  
-} from './components/storage'
+} from './components/storage';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
 
 
@@ -53,6 +54,7 @@ class App extends React.Component {
             })
           }
         });
+        <Redirect to="/" />
     }
     else{
       this.setState({
@@ -61,6 +63,7 @@ class App extends React.Component {
     }
   }
   componentDidMount(){
+   
     
     const obj=getfromstorage('account');
     //console.log(obj.token);
@@ -101,6 +104,7 @@ class App extends React.Component {
   }
   render()
   {
+
     const{
       token,
       isloading,

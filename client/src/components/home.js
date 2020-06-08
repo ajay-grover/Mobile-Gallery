@@ -3,6 +3,9 @@ import {
   Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button,Row,Col,InputGroup,Input
 } from 'reactstrap';
+import {
+  getfromstorage
+} from './storage';
 
 export default class Home extends React.Component
 {
@@ -12,7 +15,8 @@ export default class Home extends React.Component
     }
     state={
       mobile:[],
-      search:''
+      search:'',
+    
     }
     componentDidMount()
     {
@@ -33,13 +37,14 @@ export default class Home extends React.Component
         const index=event.target.parentNode.parentNode.parentNode.parentNode.getAttribute('i');
         console.log(mobile[index]);
         const m=mobile[index];
+        const obj=getfromstorage('account');
         fetch('http://localhost:9000/mobile/addtocart', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({mobilename:m.mobilename,mobilespecs:m.mobilespecs,mobileprice:m.mobileprice,mobileimage:m.mobileimage,quantity:1})
+          body: JSON.stringify({mobilename:m.mobilename,mobilespecs:m.mobilespecs,mobileprice:m.mobileprice,mobileimage:m.mobileimage,quantity:1,email:obj.email})
         }).then(res=>res.json())
         .then(j=>{
           if(j.success){
@@ -50,7 +55,7 @@ export default class Home extends React.Component
               alert(j.message);
           }
           });
-         
+         window.location.reload();
       }
 
       search=(event)=>{
@@ -90,7 +95,7 @@ export default class Home extends React.Component
             }
             return <div   key={index} i={index}>
               <Col>
-              <Card sm='6' style={{width:'300px',height:'380px',float:'left',marginLeft:'70px',marginTop:'30px'}}>
+              <Card sm='6' style={{width:'300px',height:'420px',float:'left',marginLeft:'70px',marginTop:'30px'}}>
                 <CardImg top width="50%" src={img} style={{height: 'auto',maxHeight: '250px',width: 'auto',maxWidth: '250px'}}/>
                 <CardBody>
                 <CardTitle>{mobile.mobilename}</CardTitle>
